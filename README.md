@@ -1,17 +1,17 @@
 # Django-Issuetrack
 
-Should mimic in functionality that of the issue tracker used for Bitbucket repositories.
+Should mimic in functionality that of the issue tracker used for GitHub and Bitbucket repositories.
 
-Objectives:
+## Objectives:
 
 Plan to use the following models:
 
-* Project
+### Project
 - Name
 - Owner
 - Members
 
-* Issue
+### Issue
 - Title
 - Description
 - Kind: bug, feature, enhancement, proposal, task, info
@@ -23,5 +23,5 @@ Plan to use the following models:
 - Urgency: Urgent/important, Urgent/not important, Not urgent/important, Not urgent/not important
 - Status: New, Open, In Progress, Resolved, Closed, On-hold, Pending Creater, Pending 3rd Party, Duplicate, Invalid/Unfounded, Won't Fix
 
-* Comment
+### Comment
 - Relate to Issue
