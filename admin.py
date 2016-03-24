@@ -1,3 +1,7 @@
 from django.contrib import admin
+from issuetrack.models import Comment, Component, Issue, Project
 
-# Register your models here.
+admin.site.register(Component)
+admin.site.register(Issue)
+admin.site.register(Project)
+admin.site.register(Comment)
