@@ -1,13 +1,13 @@
 {% include page_heading %}
 
-	<h3>Create New Issue</h3>
+	<h3>Create New Project</h3>
 
 		{% include form_table_heading %}
 			
-			{{ add_issue_form.as_table }}
+			{{ add_project_form.as_table }}
 			
 				{% include form_buttons_heading %}
-					
+
 					<input type="submit" value="Save"/>
 					
 					<a href="{% url 'index' %}">

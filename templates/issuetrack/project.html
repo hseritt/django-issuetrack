@@ -1,0 +1,92 @@
+{% include page_heading %}
+
+	<h3>Project - {{ project.name }}</h3>
+
+	<table>
+
+		<tr>
+			<th>
+				Name
+			</th>
+
+			<td>
+				{{ project.name }}
+			</td>
+		</tr>
+
+		<tr>
+			<th>
+				Key
+			</th>
+
+			<td>
+				{{ project.key }}
+			</td>
+		</tr>
+
+		<tr>
+			<th>
+				Owner
+			</th>
+
+			<td>
+				{{ project.owner.username }}	
+			</td>
+		</tr>
+
+		<tr>
+			<th>
+				Description
+			</th>
+
+			<td>
+				{{ project.description }}
+			</td>
+
+		</tr>
+		
+		<tr>
+			<th>Members</th>
+			
+			<td>
+				<ul>
+					{% for member in project.members.all %}
+						<li>{{ member.username }}</li>
+					{% endfor %}
+				</ul>
+			</td>
+		
+		</tr>
+
+		<tr>
+			<td colspan="2">
+				
+				<a href="/issuetrack/project/{{ project.id }}/component/add/">
+					Add Component
+				</a>
+			
+			</td>
+		</tr>
+	
+		<tr>
+
+			<th>Components</th>
+			
+			<td>
+				<ul>
+					{% for component in project.component_set.all %}
+						
+						<li>{{ component.name }}</li>
+						
+						<p>
+							{{ component.description }}
+						</p>
+					
+					{% endfor %}
+				</ul>
+			</td>
+
+		</tr>
+	</table>
+
+{% include foot %}

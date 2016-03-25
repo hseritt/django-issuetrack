@@ -1,0 +1,36 @@
+{% include page_heading %}
+
+	<h3>Projects List</h3>
+
+	<table>
+		
+		<tr>
+
+			<th>Name</th>
+			<th>Key</th>
+			<th>Owner</th>
+		
+		</tr>
+		
+		{% for project in project_list %}
+			
+			<tr>
+				
+				<td>
+					
+					<a href="{% url 'project' project_id=project.id %}">
+						{{ project.name }}
+					</a>
+				
+				</td>
+				
+				<td>{{ project.key }}</td>
+				<td>{{ project.owner.username }}</td>
+			
+			</tr>
+
+		{% endfor %}
+	
+	</table>
+
+{% include foot %}

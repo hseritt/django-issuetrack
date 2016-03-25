@@ -143,7 +143,7 @@ class Issue(models.Model):
 	modified = models.DateTimeField(auto_now=True)
 	''' The date and time when the issue was last updated.
 	'''
-	component = models.ForeignKey(Component)
+	component = models.ForeignKey(Component, null=True, blank=True)
 	''' Associates with the Component.
 	'''
 

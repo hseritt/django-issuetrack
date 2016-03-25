@@ -5,8 +5,8 @@ import os
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from issuetrack.forms import AddIssueForm
-from issuetrack.models import Comment, Issue
+from issuetrack.forms import AddIssueForm, AddProjectForm, AddComponentForm
+from issuetrack.models import Comment, Component, Issue, Project
 from issuetrack.settings import TEMPLATE_DIR, TEMPLATE_CONTEXT
 
 
@@ -120,4 +120,162 @@ def add_issue(request):
 	''' Template file used by this view.
 	'''
 	
+	return render(request, template_file, view_context)
+
+def add_project(request):
+	''' View: /project/add/
+	'''
+
+	if request.method == 'POST':
+		''' If this view is called using the POST method ...
+		'''
+		
+		add_project_form = AddProjectForm(request.POST)
+		''' Get the data from the POST request.
+		'''
+
+		if add_project_form.is_valid():
+			''' If this is form's data is valid then create the new Issue object.
+			'''
+			add_project_form.save()
+			''' Save the Project object to peristence.
+			'''
+			return HttpResponseRedirect(
+				reverse('projects')
+			)
+			''' Redirect to the "home" page.
+			'''
+	else:
+		''' If this view is called by any other method besides POST -- usually 'GET' ...
+		'''
+		add_project_form = AddProjectForm()
+		''' Create a blank project form.
+		'''
+
+	view_context = {
+		'add_project_form': add_project_form,
+		'page_title': 'Issuetrack - Add New Project',
+	}
+
+	view_context.update(TEMPLATE_CONTEXT)
+	''' Add standard template context from Issuetrack settings file.
+	'''
+
+	template_file = os.path.join(TEMPLATE_DIR, 'add_project.html')
+	''' Template file used by this view.
+	'''
+
+	return render(request, template_file, view_context)
+
+def projects(request):
+	''' View: /projects/
+	'''
+
+	view_context = {
+		'project_list': Project.objects.all(),
+		'page_title': 'Issuetracker - Projects',
+	}
+	''' Context used for this view:
+		projects_list: 	List of all projects
+		page_title: 	Title of the html page
+	'''
+
+	view_context.update(TEMPLATE_CONTEXT)
+	''' Add standard template context from Issuetrack settings file.
+	'''
+
+	template_file = os.path.join(TEMPLATE_DIR, 'projects.html')
+	''' Template file used by this view.
+	'''
+
+	return render(request, template_file, view_context)
+
+def project(request, project_id):
+	''' View: /project/<project_id>/
+	'''
+
+	project = Project.objects.get(pk=project_id)
+	''' Project object for this view.
+	'''
+
+	view_context = {
+		'project': project,
+		'page_title': 'Issuetrack - Project: {}'.format(project.name),
+	}
+	''' Context used for this view:
+		project: 		Project object for this view.
+		page_title: 	Title of the html page.
+	'''
+
+	view_context.update(TEMPLATE_CONTEXT)
+	''' Add standard template context from Issuetrack settings file.
+	'''
+
+	template_file = os.path.join(TEMPLATE_DIR, 'project.html')
+	''' Template file used by this view.
+	'''
+
+	return render(request, template_file, view_context)
+
+def add_component(request, project_id):
+	''' View: /project/<project_id>/component/add/
+	'''
+
+	project = Project.objects.get(pk=project_id)
+	''' Project object this component is being added for.
+	'''
+
+	if request.method == 'POST':
+		''' If this view is called using the POST method ...
+		'''
+		
+		add_component_form = AddComponentForm(request.POST)
+		''' Get the data from the POST request.
+		'''
+		
+		if add_component_form.is_valid():
+			''' If this is form's data is valid then create the new Component object.
+			'''
+
+			new_component = add_component_form.save(commit=False)
+			''' Create the new component for the project but don't save it yet.
+			'''
+			new_component.project = project
+			''' Set the project.
+			'''
+			new_component.save()
+			''' Save the new component to persistence.
+			'''
+
+			return HttpResponseRedirect(
+				reverse(
+					'project', kwargs={'project_id':project_id}
+				)
+			)
+			''' Redirect the user to individual project page.
+			'''
+	else:
+		add_component_form = AddComponentForm()
+		''' Create an empty component form.
+		'''
+
+	view_context = {
+		'add_component_form': add_component_form,
+		'page_title': 'Issuetrack - Add New Component for Project {}'.format(project_id),
+		'project': project,
+	}
+	''' Context used for this view:
+		add_component_form: 	Generated AddComponentForm.
+		page_title: 			Title of the html page.
+		project: 				Project object for this view.
+	'''
+
+	view_context.update(TEMPLATE_CONTEXT)
+	''' Add standard template context from Issuetrack settings file.
+	'''
+
+	template_file = os.path.join(TEMPLATE_DIR, 'add_component.html')
+	''' Template file used by this view.
+	'''
+
 	return render(request, template_file, view_context)

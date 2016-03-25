@@ -10,12 +10,18 @@
 
 	<body>
 
-		<p>Hi, {{ user.username }}! <a href="/admin/">Admin Console</a></p>
+		<header>
 
-		<h1>Issue Track</h1>
+			Hi, {{ user.username }}! <a href="/admin/">Admin Console</a>
 
-		<p>
+			<h1>Issue Track</h1>
+
 			<a href="{% url 'index' %}">Home</a>
 			 | 
+			<a href="{% url 'projects' %}">Projects</a>
+			 | 
 			<a href="{% url 'add_issue' %}">Create New Issue</a>
-		</p>
+			 |
+			<a href="{% url 'add_project' %}">Add New Project</a>
+
+		</header>
