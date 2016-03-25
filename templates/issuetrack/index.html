@@ -1,0 +1,45 @@
+{% include page_heading %}
+
+	<h3>Issues List</h3>
+
+	<table>
+		
+		<tr>
+
+			<th>Title</th>
+			<th>Kind</th>
+			<th>Priority</th>
+			<th>Status</th>
+			<th>Assignee</th>
+			<th>Created</th>
+			<th>Updated</th>
+		
+		</tr>
+		
+		{% for issue in issue_list %}
+			
+			<tr>
+				
+				<td>
+					#{{ issue.id }}: 
+					
+					<a href="{% url 'issue' issue_id=issue.id %}">
+						{{ issue.title }}
+					</a>
+				
+				</td>
+				
+				<td>{{ issue.kind }}</td>
+				<td>{{ issue.priority}}</td>
+				<td>{{ issue.status }}</td>
+				<td>{{ issue.assignee }}</td>
+				<td>{{ issue.created }}</td>
+				<td>{{ issue.modified }}</td>
+			
+			</tr>
+
+		{% endfor %}
+	
+	</table>
+
+{% include foot %}

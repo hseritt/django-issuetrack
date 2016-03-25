@@ -1,0 +1,33 @@
+{% include page_heading %}
+
+	<h3>Create New Issue</h3>
+
+	<form action="" method="POST">
+
+		{% csrf_token %}
+		
+		<table>
+			
+			{{ add_issue_form.as_table }}
+			
+			<tr>
+				
+				<td></td>
+				
+				<td>
+					
+					<input type="submit" value="Save"/>
+					
+					<a href="/issuetrack/">
+						Cancel
+					</a>
+
+				</td>
+
+			</tr>
+
+		</table>
+
+	</form>
+
+{% include foot %}

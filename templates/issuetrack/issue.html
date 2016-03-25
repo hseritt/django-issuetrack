@@ -1,0 +1,58 @@
+{% include page_heading %}
+
+	<h3>Issue #{{ issue.id }} {{ issue.status }}</h3>
+
+	<h2>{{ issue.title }}</h2>
+
+	<table>
+
+		<tr>
+			<td>
+				{{ issue.creater }} created an issue at {{ issue.created }}
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				{{ issue.description }}
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<h2>Comments {{ comment_list.count }}</h2>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<a href="/issuetrack/issue/{{ issue.id }}/comment/add/">
+					Add Comment
+				</a>
+		</tr>
+		
+		{% for comment in comment_list %}
+			
+			<tr>
+				<td>
+					{{ comment.author }}
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					{{ comment.text }}
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					{{ comment.created }}
+				</td>
+			</tr>
+
+		{% endfor %}
+	
+	</table>
+
+{% include foot %}

@@ -1,0 +1,21 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		
+		<title>{{ page_title }}</title>
+	
+	</head>
+
+	<body>
+
+		<p>Hi, {{ user.username }}! <a href="/admin/">Admin Console</a></p>
+
+		<h1>Issue Track</h1>
+
+		<p>
+			<a href="{% url 'index' %}">Home</a>
+			 | 
+			<a href="{% url 'add_issue' %}">Create New Issue</a>
+		</p>
