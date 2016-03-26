@@ -1,6 +1,6 @@
 {% include page_heading %}
 
-	<h3>Issues List</h3>
+	<h1>Issues List</h1>
 
 	<table>
 		
@@ -21,7 +21,15 @@
 			<tr>
 				
 				<td>
-					#{{ issue.id }}: 
+					{% if issue.component %}
+						
+						{{ issue.component.project.key }}
+
+					{% else %}
+						undef
+					{% endif %}
+
+					- {{ issue.id }}: 
 					
 					<a href="{% url 'issue' issue_id=issue.id %}">
 						{{ issue.title }}

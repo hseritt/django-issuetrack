@@ -2,14 +2,15 @@
 from __future__ import absolute_import
 
 import os
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from issuetrack.forms import AddIssueForm, AddProjectForm, AddComponentForm
 from issuetrack.models import Comment, Component, Issue, Project
 from issuetrack.settings import TEMPLATE_DIR, TEMPLATE_CONTEXT
 
-
+@login_required(login_url='/admin/login/')
 def index(request):
 	''' View: /
 	'''
@@ -33,7 +34,32 @@ def index(request):
 
 	return render(request, template_file, view_context)
 
+@login_required(login_url='/admin/login/')
+def projects(request):
+	''' View: /projects/
+	'''
 
+	view_context = {
+		'project_list': Project.objects.all(),
+		'page_title': 'Issuetracker - Projects',
+	}
+	''' Context used for this view:
+		projects_list: 	List of all projects
+		page_title: 	Title of the html page
+	'''
+
+	view_context.update(TEMPLATE_CONTEXT)
+	''' Add standard template context from Issuetrack settings file.
+	'''
+
+	template_file = os.path.join(TEMPLATE_DIR, 'projects.html')
+	''' Template file used by this view.
+	'''
+
+	return render(request, template_file, view_context)
+
+
+@login_required(login_url='/admin/login/')
 def issue(request, issue_id):
 	''' View: /issue/<issue_id>/
 	'''
@@ -64,6 +90,36 @@ def issue(request, issue_id):
 	return render(request, template_file, view_context)
 
 
+@login_required(login_url='/admin/login/')
+def project(request, project_id):
+	''' View: /project/<project_id>/
+	'''
+
+	project = Project.objects.get(pk=project_id)
+	''' Project object for this view.
+	'''
+
+	view_context = {
+		'project': project,
+		'page_title': 'Issuetrack - Project: {}'.format(project.name),
+	}
+	''' Context used for this view:
+		project: 		Project object for this view.
+		page_title: 	Title of the html page.
+	'''
+
+	view_context.update(TEMPLATE_CONTEXT)
+	''' Add standard template context from Issuetrack settings file.
+	'''
+
+	template_file = os.path.join(TEMPLATE_DIR, 'project.html')
+	''' Template file used by this view.
+	'''
+
+	return render(request, template_file, view_context)
+
+
+@login_required(login_url='/admin/login/')
 def add_issue(request):
 	''' View: /issue/add/
 	'''
@@ -122,6 +178,8 @@ def add_issue(request):
 	
 	return render(request, template_file, view_context)
 
+
+@login_required(login_url='/admin/login/')
 def add_project(request):
 	''' View: /project/add/
 	'''
@@ -167,56 +225,8 @@ def add_project(request):
 
 	return render(request, template_file, view_context)
 
-def projects(request):
-	''' View: /projects/
-	'''
 
-	view_context = {
-		'project_list': Project.objects.all(),
-		'page_title': 'Issuetracker - Projects',
-	}
-	''' Context used for this view:
-		projects_list: 	List of all projects
-		page_title: 	Title of the html page
-	'''
-
-	view_context.update(TEMPLATE_CONTEXT)
-	''' Add standard template context from Issuetrack settings file.
-	'''
-
-	template_file = os.path.join(TEMPLATE_DIR, 'projects.html')
-	''' Template file used by this view.
-	'''
-
-	return render(request, template_file, view_context)
-
-def project(request, project_id):
-	''' View: /project/<project_id>/
-	'''
-
-	project = Project.objects.get(pk=project_id)
-	''' Project object for this view.
-	'''
-
-	view_context = {
-		'project': project,
-		'page_title': 'Issuetrack - Project: {}'.format(project.name),
-	}
-	''' Context used for this view:
-		project: 		Project object for this view.
-		page_title: 	Title of the html page.
-	'''
-
-	view_context.update(TEMPLATE_CONTEXT)
-	''' Add standard template context from Issuetrack settings file.
-	'''
-
-	template_file = os.path.join(TEMPLATE_DIR, 'project.html')
-	''' Template file used by this view.
-	'''
-
-	return render(request, template_file, view_context)
-
+@login_required(login_url='/admin/login/')
 def add_component(request, project_id):
 	''' View: /project/<project_id>/component/add/
 	'''

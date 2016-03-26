@@ -8,6 +8,12 @@ from issuetrack.views import index, issue, add_issue, add_project, projects, pro
 
 urlpatterns = [
     url(
+        regex=r'^logout/$', 
+        view=logout, 
+        kwargs={'next_page': '/issuetrack/'}, 
+        name='logout'
+    ),
+    url(
     	regex=r'^$',
     	view=index,
     	name='index'

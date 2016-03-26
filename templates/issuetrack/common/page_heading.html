@@ -5,23 +5,50 @@
 	<head>
 		
 		<title>{{ page_title }}</title>
-	
+
+		<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+		
+		<link rel="stylesheet" type="text/css" href="/static/admin/css/dashboard.css" />
+		
+		<link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css" />
+
 	</head>
 
-	<body>
+	<body class=" app-issuetrack model-comment change-form"
+  data-admin-utc-offset="0">
 
-		<header>
+		<div id="container">
 
-			Hi, {{ user.username }}! <a href="/admin/">Admin Console</a>
+			<div id="header">
 
-			<h1>Issue Track</h1>
+				<div id="branding">
+					<h1 id="site-name">Issue Track</h1>
+				</div>
 
-			<a href="{% url 'index' %}">Home</a>
-			 | 
-			<a href="{% url 'projects' %}">Projects</a>
-			 | 
-			<a href="{% url 'add_issue' %}">Create New Issue</a>
-			 |
-			<a href="{% url 'add_project' %}">Add New Project</a>
+				<div id="user-tools">
 
-		</header>
+					Hi, {{ user.username }}! 
+					&middot;
+					<a href="/admin/">Admin Console</a> 
+					&middot; 
+					<a href="{% url 'logout' %}">Logout</a> 
+
+				</div>
+
+			</div>
+
+			<div class="breadcrumbs">
+
+				<a href="{% url 'index' %}">Home</a>
+				 &middot; 
+				<a href="{% url 'projects' %}">Projects</a>
+				 &middot; 
+				<a href="{% url 'add_issue' %}">Create New Issue</a>
+				 &middot; 
+				<a href="{% url 'add_project' %}">Add New Project</a>
+
+			</div>
+
+			<div id="content" class="colM">
+
+				<div id="content-main">
