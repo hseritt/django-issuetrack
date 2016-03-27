@@ -9,8 +9,8 @@ class AddIssueForm(ModelForm):
 		model = Issue
 		
 		fields = [
-			'title', 'description', 'steps', 'observed', 'expected',
-			'kind', 'priority', 'urgency', 'component',
+			'title', 'assignee', 'description', 'steps', 'observed', 
+			'expected', 'kind', 'priority', 'urgency', 'component',
 		]
 
 	def clean(self):
