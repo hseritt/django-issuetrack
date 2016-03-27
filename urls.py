@@ -4,7 +4,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib.auth.views import login
 from django.contrib.auth.views import logout
 
-from issuetrack.views import index, issue, add_issue, add_project, projects, project, add_component, add_comment, change_issue, change_comment, change_project
+from issuetrack.views import index, issue, add_issue, add_project, projects, project, add_component, add_comment, change_issue, change_comment, change_project, change_component, delete_project, delete_component
 
 urlpatterns = [
     url(
@@ -44,6 +44,16 @@ urlpatterns = [
         name='change_comment',
     ),
     url(
+        regex=r'component/(?P<component_id>[^/]+)/change/$',
+        view=change_component,
+        name='change_component',
+    ),
+    url(
+        regex=r'component/(?P<component_id>[^/]+)/delete/$',
+        view=delete_component,
+        name='delete_component',
+    ),
+    url(
         regex=r'^projects/$',
         view=projects,
         name='projects',
@@ -62,6 +72,11 @@ urlpatterns = [
         regex=r'^project/(?P<project_id>[^/]+)/change/$',
         view=change_project,
         name='change_project',
+    ),
+    url(
+        regex=r'^project/(?P<project_id>[^/]+)/delete/$',
+        view=delete_project,
+        name='delete_project',
     ),
     url(
         regex=r'^project/(?P<project_id>[^/]+)/component/add/$',

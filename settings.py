@@ -34,7 +34,9 @@ FORM_TABLE_FOOTING = 'form_table_footing.html'
 '''
 
 '''
+==================================================
 Make settings changes above and leave below as is.
+==================================================
 '''
 
 TEMPLATE_DIR='{}'.format(APP_NAME)

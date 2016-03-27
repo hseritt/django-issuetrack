@@ -1,0 +1,19 @@
+{% include page_heading %}
+
+	<h1>Change Component Details</h1>
+
+		{% include form_table_heading %}
+			
+			{{ change_component_form.as_table }}
+			
+				{% include form_buttons_heading %}
+										
+					<a 
+						href="{% url 'project' project_id=component.project.id %}"
+					>
+						Cancel
+					</a>
+
+		{% include form_table_footing %}
+
+{% include foot %}

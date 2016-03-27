@@ -14,19 +14,21 @@ class AddIssueForm(ModelForm):
 		]
 
 	def clean(self):
+		
 		cleaned_data = super(AddIssueForm, self).clean()
 		kind = cleaned_data.get('kind')
 		steps = cleaned_data.get('steps')
 		observed = cleaned_data.get('observed')
 		expected = cleaned_data.get('expected')
 
-		print('KIND IS {}'.format(kind))
-
 		if kind == 'Bug' or kind == 'Improvement':
+			
 			if not steps or not observed or not expected:
+				
 				raise forms.ValidationError(
 					"Steps to Replicate, Observed Behavior and Expected Behavior fields must be filled out if this issue is being created as a Bug or an Improvement."
 				)
+
 
 class ChangeIssueForm(AddIssueForm):
 
@@ -58,6 +60,7 @@ class AddProjectForm(ModelForm):
 			'name', 'key', 'owner', 'description', 'members',
 		]
 
+
 class ChangeProjectForm(ModelForm):
 
 	def __init__(self, *args, **kwargs):
@@ -76,6 +79,7 @@ class ChangeProjectForm(ModelForm):
 			'name', 'key', 'owner', 'description', 'members',
 		]
 
+
 class AddComponentForm(ModelForm):
 
 	def __init__(self, *args, **kwargs):
@@ -93,6 +97,26 @@ class AddComponentForm(ModelForm):
 		fields = [
 			'name', 'description',
 		]
+		
+
+class ChangeComponentForm(ModelForm):
+
+	def __init__(self, *args, **kwargs):
+		super(ChangeComponentForm, self).__init__(*args, **kwargs)
+		self.fields['description'].widget.attrs.update(
+			{
+				'class': 'mceNoEditor',
+			}
+		)
+
+	class Meta:
+
+		model = Component
+
+		fields = [
+			'name', 'description',
+		]
+		
 
 class AddCommentForm(ModelForm):
 

@@ -30,18 +30,30 @@
 				{% if project.owner == user %}
 
 					<td>
-						<a href="/issuetrack/project/{{ project.id }}/change/">
+						<a 
+							href="{% url 'change_project' project_id=project.id %}"
+						>
 							Edit
 						</a>
 					</td>
 
 					<td>
-						<a href="/issuetrack/project/{{ project.id }}/delete/">
+						<a 
+							href="{% url 'delete_project' project_id=project.id %}"
+
+							onclick="return confirm('This will delete the <{{ project.name }}> project and all issues associated with it. Click OK to confirm');"
+						>
 							Delete
 						</a>
 					</td>
 
 				{% endif %}
+			</tr>
+
+		{% empty %}
+
+			<tr>
+				<td>No items</td>
 			</tr>
 
 		{% endfor %}

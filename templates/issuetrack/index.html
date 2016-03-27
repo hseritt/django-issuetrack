@@ -7,10 +7,12 @@
 			All
 		</a>
 		&middot;
+
 		<a href="/issuetrack/?status=open">
 			Open
 		</a>
 		&middot;
+		
 		<a href="/issuetrack/?status=closed">
 			Closed
 		</a>
@@ -56,7 +58,7 @@
 				<a href="{% url 'index' %}?status={{ status }}&order_by=assignee">
 					Asignee 
 				</a>
-				<a href="{% url 'index' %}?status={{ status }}&order_by=assignee"> 
+				<a href="{% url 'index' %}?status={{ status }}&order_by=-assignee"> 
 					 > 
 				</a>
 			</th>
@@ -84,17 +86,21 @@
 			<tr>
 				
 				<td>
-					{% if issue.component %}
-						
-						{{ issue.component.project.key }}
-
-					{% else %}
-						undef
-					{% endif %}
-
-					- {{ issue.id }}: 
-					
 					<a href="{% url 'issue' issue_id=issue.id %}">
+						
+						{% if issue.component %}
+							
+							{{ issue.component.project.key }}
+
+						{% else %}
+							
+							undef
+						
+						{% endif %}
+
+						- {{ issue.id }}: 
+						
+						
 						{{ issue.title }}
 					</a>
 				
@@ -117,11 +123,18 @@
 			 
 			</tr>
 
+		{% empty %}
+		
+			<tr>
+				<td>No items</td>
+			</tr>
+
 		{% endfor %}
 	
 	</table>
 
 	<p class="paginator" style="margin-top:50px;">
+		
 		{% if issue_list.has_previous %}
 			<a href="?page={{ issue_list.previous_page_number}}">
 				Previous
@@ -137,6 +150,7 @@
 				Next
 			</a>
 		{% endif %}
+	
 	</p>
 
 {% include foot %}

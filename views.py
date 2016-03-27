@@ -8,7 +8,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from issuetrack.forms import AddIssueForm, AddProjectForm, AddComponentForm, AddCommentForm, ChangeIssueForm, ChangeCommentForm, ChangeProjectForm
+from issuetrack.forms import AddIssueForm, AddProjectForm, AddComponentForm, AddCommentForm, ChangeIssueForm, ChangeCommentForm, ChangeProjectForm, ChangeComponentForm
 from issuetrack.models import Comment, Component, Issue, Project
 from issuetrack.settings import TEMPLATE_DIR, TEMPLATE_CONTEXT
 
@@ -585,8 +585,79 @@ def change_project(request, project_id):
 	return render(request, template_file, view_context)
 
 
+@login_required(login_url='/admin/login/')
+def change_component(request, component_id):
+	''' View: /component/<component_id>/change/
+	'''
+
+	component = Component.objects.get(pk=component_id)
+
+	if request.method == "POST":
+		''' If this view is called using the POST method ...
+		'''
+		
+		change_component_form = ChangeComponentForm(request.POST, instance=component)
+		''' Get the data from the POST request but saving for this issue.
+		'''
+		
+		if change_component_form.is_valid():
+			''' If this is form's data is valid then create the new Component object.
+			'''
+			component = change_component_form.save()
+			''' Save data from this form to the same component.
+			'''
+			
+			return HttpResponseRedirect(reverse(
+				'project', kwargs={'project_id': component.project.id}))
+			''' Send the user back to the project page.
+			'''
+
+	else:
+		''' If this view is called by any other method besides POST -- usually 'GET' ...
+		'''
+		change_component_form = ChangeComponentForm(instance=component)
+		''' Create a change component form based on the component instance.
+		'''
+
+	view_context = {
+		'component': component,
+		'change_component_form': change_component_form,
+		'page_title': 'Issuetrack - Change Component - {}'.format(component.name),
+	}
+	''' Context used for this view:
+		component:				Component for this view.
+		change_component_form: 	Our generated change_component_form.
+		page_title: 			Title of the html page.
+	'''
+
+	view_context.update(TEMPLATE_CONTEXT)
+	''' Add standard template context from Issuetrack settings file.
+	'''
+
+	template_file = os.path.join(TEMPLATE_DIR, 'change_component.html')
+	''' Template file used by this view.
+	'''
+	
+	return render(request, template_file, view_context)
 
 
+def delete_project(request, project_id):
+	''' View: /project/<project_id>/delete/
+	'''
+	project = Project.objects.get(pk=project_id)
+	project.delete()
+
+	return HttpResponseRedirect(reverse('projects'))
+
+def delete_component(request, component_id):
+	''' View: /component/<component_id>/delete/
+	'''
+	component = Component.objects.get(pk=component_id)
+	component.delete()
+
+	return HttpResponseRedirect(
+		reverse('project', kwargs={'project_id': component.project.id})
+	)
 
 
 

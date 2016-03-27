@@ -6,10 +6,12 @@
 
 		<tr>
 			<td colspan="2">
+				
 				{{ issue.creater }} created an issue at {{ issue.created }}
+				
 				{% if issue.creater == user  or issue.assignee == user %}
 					<p>
-						<a href="/issuetrack/issue/{{ issue.id }}/change/">
+						<a href="{% url 'change_issue' issue_id=issue.id %}">
 							Edit Issue
 						</a>
 					</p>
@@ -33,6 +35,13 @@
 			<th>Assignee:</th>
 			<td>
 				{{ issue.assignee }}
+			</td>
+		</tr>
+
+		<tr>
+			<th>Project/Component:</th>
+			<td>
+				{{ issue.component }}
 			</td>
 		</tr>
 
@@ -110,7 +119,7 @@
 					</p>
 					{% if comment.author == user %}
 						<p>
-							<a href="/issuetrack/comment/{{ comment.id }}/change/">
+							<a href="{% url 'change_comment' comment_id=comment.id %}">
 								Edit
 							</a>
 						</p>

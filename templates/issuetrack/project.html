@@ -81,11 +81,29 @@
 						<p>
 							{{ component.description|safe }}
 						</p>
+
+						<p>
+							<a 
+								href="{% url 'change_component' component_id=component.id %}"
+							>
+
+								Edit
+							
+							</a>
+							 &middot; 
+							
+							<a 
+								href="{% url 'delete_component' component_id=component.id %}"
+
+								onclick="return confirm('Click OK to confirm deletion.');"
+							>
+								Delete
+							</a>
+						</p>
 					
 					{% endfor %}
 				</ul>
 			</td>
-
 		</tr>
 	</table>
 
