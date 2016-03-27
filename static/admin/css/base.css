@@ -104,7 +104,7 @@ li ul {
 }
 
 li, dt, dd {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 20px;
 }
 
@@ -243,11 +243,11 @@ table {
 }
 
 td, th {
-    font-size: 13.5px;
+    font-size: 13px;
     line-height: 16px;
-    border-bottom: 1px solid #eee;
+    /*border-bottom: 1px solid #eee;*/
     vertical-align: top;
-    padding: 8px;
+    padding: 14px;
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
 }
 
@@ -964,4 +964,8 @@ table#change-history tbody th {
 
 .popup #header {
     padding: 10px 20px;
+}
+
+p.paginator {
+    font-size: 12px;
 }
