@@ -2,17 +2,80 @@
 
 	<h1>Issues List</h1>
 
+	<p>
+		<a href="/issuetrack/">
+			All
+		</a>
+		&middot;
+		<a href="/issuetrack/?status=open">
+			Open
+		</a>
+		&middot;
+		<a href="/issuetrack/?status=closed">
+			Closed
+		</a>
+	</p>
+
 	<table>
 		
 		<tr>
 
-			<th>Title</th>
-			<th>Kind</th>
-			<th>Priority</th>
-			<th>Status</th>
-			<th>Assignee</th>
-			<th>Created</th>
-			<th>Updated</th>
+			<th>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=title">
+					Title 
+				</a>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=-title"> 
+					 > 
+				</a>
+			</th>
+			<th>
+				<a href="{% url 'index'%}?status={{ status }}&order_by=kind">
+					Kind 
+				</a>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=-kind"> 
+					 > 
+				</a>
+			</th>
+			<th>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=priority">
+					Priority 
+				</a>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=-priority"> 
+					 > 
+				</a>
+			</th>
+			<th>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=status">
+					Status 
+				</a>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=-status"> 
+					 > 
+				</a>
+			</th>
+			<th>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=assignee">
+					Asignee 
+				</a>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=assignee"> 
+					 > 
+				</a>
+			</th>
+			<th>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=created">
+					Created 
+				</a>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=-created"> 
+					 > 
+				</a>
+			</th>
+			<th>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=modified">
+					Modified 
+				</a>
+				<a href="{% url 'index' %}?status={{ status }}&order_by=-modified"> 
+					 > 
+				</a>
+			</th>
 		
 		</tr>
 		
@@ -41,13 +104,39 @@
 				<td>{{ issue.priority}}</td>
 				<td>{{ issue.status }}</td>
 				<td>{{ issue.assignee }}</td>
-				<td>{{ issue.created }}</td>
-				<td>{{ issue.modified }}</td>
-			
+				<td 
+					title="{{ issue.created|date:'Y-m-d H:i' }}"
+				>
+					{{ issue.created|timesince }}
+				</td>
+				<td
+					title="{{ issue.modified|date:'Y-m-d H:i' }}"
+				>
+					{{ issue.modified|timesince }}
+				</td>
+			 
 			</tr>
 
 		{% endfor %}
 	
 	</table>
+
+	<p class="paginator" style="margin-top:50px;">
+		{% if issue_list.has_previous %}
+			<a href="?page={{ issue_list.previous_page_number}}">
+				Previous
+			</a>
+			<<
+		{% endif %}
+
+		Page {{ issue_list.number }} of {{ issue_list.paginator.num_pages}}
+
+		{% if issue_list.has_next %}
+			>> 
+			<a href="?page={{ issue_list.next_page_number }}">
+				Next
+			</a>
+		{% endif %}
+	</p>
 
 {% include foot %}

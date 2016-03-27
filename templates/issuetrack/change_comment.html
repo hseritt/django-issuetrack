@@ -1,0 +1,17 @@
+{% include page_heading %}
+
+	<h1>Change Comment Details</h1>
+
+		{% include form_table_heading %}
+			
+			{{ change_comment_form.as_table }}
+			
+				{% include form_buttons_heading %}
+										
+					<a href="{% url 'issue' issue_id=comment.issue.id %}">
+						Cancel
+					</a>
+
+		{% include form_table_footing %}
+
+{% include foot %}

@@ -4,6 +4,20 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+STATUS_CHOICES = (
+	('New', 'New'),
+	('Open', 'Open'),
+	('In Progress', 'In Progress'),
+	('Resolved', 'Resolved'),
+	('Closed', 'Closed'),
+	('On Hold', 'On Hold'),
+	('Pending Creater', 'Pending Creater'),
+	('Pending 3rd Party', 'Pending 3rd Party'),
+	('Duplicate', 'Duplicate'),
+	('Invalid/Unfounded', 'Invalid/Unfounded'),
+	("Won't Fix", "Won't Fix"),
+)
+
 class Project(models.Model):
 	''' Project can be something like a software application or ongoing event or project.
 	'''
@@ -70,6 +84,18 @@ class Issue(models.Model):
 	description = models.TextField('Description')
 	''' A description of the issue.
 	'''
+
+	steps = models.TextField(
+		'Steps to Replicate Issue', null=True, blank=True,
+		help_text='These are reliable steps that when followed will replicate your issue. Not required if the description covers everything necessary for describing the issue.',
+	)
+
+	observed = models.TextField(
+		'Observed Behavior', null=True, blank=True, help_text='This is the behavior you are observing when following the steps above.')
+
+	expected = models.TextField(
+		'Expected Behavior', null=True, blank=True, help_text='This is the behavior you are reasonably expecting to occur when following the steps above.')
+
 	kind = models.CharField(
 		'Kind', 
 		max_length=30,
@@ -113,19 +139,7 @@ class Issue(models.Model):
 	status = models.CharField(
 		'Status',
 		max_length=30,
-		choices=(
-			('New', 'New'),
-			('Open', 'Open'),
-			('In Progress', 'In Progress'),
-			('Resolved', 'Resolved'),
-			('Closed', 'Closed'),
-			('On Hold', 'On Hold'),
-			('Pending Creater', 'Pending Creater'),
-			('Pending 3rd Party', 'Pending 3rd Party'),
-			('Duplicate', 'Duplicate'),
-			('Invalid/Unfounded', 'Invalid/Unfounded'),
-			("Won't Fix", "Won't Fix"),
-		),
+		choices=STATUS_CHOICES,
 		default='New',
 	)
 	''' The status or disposition of the issue.
@@ -177,10 +191,13 @@ class Comment(models.Model):
 		choices=(
 			('Public', 'Public'),
 			('Private', 'Private'),
-		)
+		),
+		default='Private',
 	)
 	''' Who the comment is intended for.
 	'''
+
+	issue_status = models.CharField('Current Issue Status', max_length=30)
 
 	def __str__(self):
 		''' String repr of the comment. Includes the issue title, comment author and the date and time when the comment was created.

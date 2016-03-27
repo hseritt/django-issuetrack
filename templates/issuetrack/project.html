@@ -40,7 +40,7 @@
 			</th>
 
 			<td>
-				{{ project.description }}
+				{{ project.description|safe }}
 			</td>
 
 		</tr>
@@ -79,7 +79,7 @@
 						<li>{{ component.name }}</li>
 						
 						<p>
-							{{ component.description }}
+							{{ component.description|safe }}
 						</p>
 					
 					{% endfor %}

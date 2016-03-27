@@ -3,6 +3,83 @@
 <html>
 
 	<head>
+
+		<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  		<script>
+  			/*
+  			tinymce.init(
+  				{ 
+  					selector: 		'textarea',
+  					resize: 			'both',
+  					elementpath: 		false,
+  					content_css: 		"/static/admin/css/forms.css",
+  					editor_deselector: 	"mceNoEditor"
+  				});
+  			*/
+  			tinymce.init({
+  			  /*editor_deselector: "mceNoEditor",
+			  selector: "textarea",*/
+			  selector: "textarea:not(.mceNoEditor)",
+			  height: 300,
+			  width: 650,
+			  resize: "both",
+			  plugins: [
+			    "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+			    "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+			    "table contextmenu directionality emoticons template textcolor paste textcolor colorpicker textpattern"
+			  ],
+
+			  toolbar1: "newdocument fullpage | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+			  toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor",
+			  toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+
+			  menubar: false,
+			  toolbar_items_size: 'small',
+
+			  style_formats: [{
+			    title: 'Bold text',
+			    inline: 'b'
+			  }, {
+			    title: 'Red text',
+			    inline: 'span',
+			    styles: {
+			      color: '#ff0000'
+			    }
+			  }, {
+			    title: 'Red header',
+			    block: 'h1',
+			    styles: {
+			      color: '#ff0000'
+			    }
+			  }, {
+			    title: 'Example 1',
+			    inline: 'span',
+			    classes: 'example1'
+			  }, {
+			    title: 'Example 2',
+			    inline: 'span',
+			    classes: 'example2'
+			  }, {
+			    title: 'Table styles'
+			  }, {
+			    title: 'Table row 1',
+			    selector: 'tr',
+			    classes: 'tablerow1'
+			  }],
+
+			  templates: [{
+			    title: 'Test template 1',
+			    content: 'Test 1'
+			  }, {
+			    title: 'Test template 2',
+			    content: 'Test 2'
+			  }],
+			  content_css: [
+			    '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+			    '//www.tinymce.com/css/codepen.min.css'
+			  ]
+			});
+  		</script>
 		
 		<title>{{ page_title }}</title>
 
@@ -14,7 +91,7 @@
 
 	</head>
 
-	<body class=" app-issuetrack model-comment change-form"
+	<body class=" app-issuetrack model-comment change-list"
   data-admin-utc-offset="0">
 
 		<div id="container">
@@ -39,13 +116,13 @@
 
 			<div class="breadcrumbs">
 
-				<a href="{% url 'index' %}">Home</a>
+				<a href="{% url 'index' %}#">Home</a>
 				 &middot; 
-				<a href="{% url 'projects' %}">Projects</a>
+				<a href="{% url 'projects' %}#">Projects</a>
 				 &middot; 
-				<a href="{% url 'add_issue' %}">Create New Issue</a>
+				<a href="{% url 'add_issue' %}#">Create New Issue</a>
 				 &middot; 
-				<a href="{% url 'add_project' %}">Add New Project</a>
+				<a href="{% url 'add_project' %}#">Add New Project</a>
 
 			</div>
 

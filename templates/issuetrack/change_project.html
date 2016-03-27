@@ -1,0 +1,17 @@
+{% include page_heading %}
+
+	<h1>Change Project Details</h1>
+
+		{% include form_table_heading %}
+			
+			{{ change_project_form.as_table }}
+			
+				{% include form_buttons_heading %}
+										
+					<a href="{% url 'projects' %}">
+						Cancel
+					</a>
+
+		{% include form_table_footing %}
+
+{% include foot %}
