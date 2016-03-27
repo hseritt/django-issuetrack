@@ -10,9 +10,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from issuetrack.forms import AddIssueForm, AddProjectForm, AddComponentForm, AddCommentForm, ChangeIssueForm, ChangeCommentForm, ChangeProjectForm, ChangeComponentForm
 from issuetrack.models import Comment, Component, Issue, Project
-from issuetrack.settings import TEMPLATE_DIR, TEMPLATE_CONTEXT
+from issuetrack.settings import TEMPLATE_DIR, TEMPLATE_CONTEXT, LOGIN_URL
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def index(request):
 	''' View: /
 	'''
@@ -75,7 +75,7 @@ def index(request):
 
 	return render(request, template_file, view_context)
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def projects(request):
 	''' View: /projects/
 	'''
@@ -100,7 +100,7 @@ def projects(request):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def issue(request, issue_id):
 	''' View: /issue/<issue_id>/
 	'''
@@ -131,7 +131,7 @@ def issue(request, issue_id):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def project(request, project_id):
 	''' View: /project/<project_id>/
 	'''
@@ -160,7 +160,7 @@ def project(request, project_id):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def add_issue(request):
 	''' View: /issue/add/
 	'''
@@ -220,7 +220,7 @@ def add_issue(request):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def add_project(request):
 	''' View: /project/add/
 	'''
@@ -267,7 +267,7 @@ def add_project(request):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def add_component(request, project_id):
 	''' View: /project/<project_id>/component/add/
 	'''
@@ -332,7 +332,7 @@ def add_component(request, project_id):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def add_comment(request, issue_id):
 	''' View: /issue/<issue_id>/comment/add/
 	'''
@@ -406,7 +406,7 @@ def add_comment(request, issue_id):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def change_issue(request, issue_id):
 	''' View: /issue/<issue_id>/change/
 	'''
@@ -460,7 +460,7 @@ def change_issue(request, issue_id):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def change_comment(request, comment_id):
 	''' View: /comment/<comment_id>/change/
 	'''
@@ -529,7 +529,7 @@ def change_comment(request, comment_id):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def change_project(request, project_id):
 	''' View: /project/<project_id>/change/
 	'''
@@ -585,7 +585,7 @@ def change_project(request, project_id):
 	return render(request, template_file, view_context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url=LOGIN_URL)
 def change_component(request, component_id):
 	''' View: /component/<component_id>/change/
 	'''

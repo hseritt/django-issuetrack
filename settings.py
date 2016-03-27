@@ -5,6 +5,8 @@ from __future__ import absolute_import
 
 import os
 
+LOGIN_URL='/admin/login/'
+
 APP_NAME='issuetrack'
 ''' This app's name.
 '''
