@@ -57,7 +57,7 @@ def index(request):
 
 	view_context = {
 		'issue_list': issue_list,
-		'page_title': 'Issuetracker',
+		'page_title': 'Issuetrack',
 		'status': status,
 	}
 	''' Context used for this view:
@@ -82,7 +82,7 @@ def projects(request):
 
 	view_context = {
 		'project_list': Project.objects.all(),
-		'page_title': 'Issuetracker - Projects',
+		'page_title': 'Issuetrack - Projects',
 	}
 	''' Context used for this view:
 		projects_list: 	List of all projects
