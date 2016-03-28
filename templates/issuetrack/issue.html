@@ -9,7 +9,7 @@
 				
 				{{ issue.creater }} created an issue at {{ issue.created }}
 				
-				{% if issue.creater == user  or issue.assignee == user %}
+				{% if issue.assignee == user or user.is_superuser or user.is_staff %}
 					<p>
 						<a href="{% url 'change_issue' issue_id=issue.id %}">
 							Edit Issue

@@ -27,23 +27,30 @@ def index(request):
 	''' Filter by status or use 'all'.
 	'''
 
+	if request.user.is_staff or request.user.is_superuser:
+		kwargs = {}
+	else:
+		kwargs = {'creater': request.user}
+	''' Staff and superuser users can see all available issues. Non-privileged users can only see their own issues.
+	'''
+
 	try:
 		
 		if status == 'all':
-			issue_list = list(Issue.objects.all().order_by(order))
+			issue_list = list(Issue.objects.filter(**kwargs).order_by(order))
 		elif status == 'open':
-			issue_list = list(Issue.objects.filter().exclude(status='Closed').order_by(order))
+			issue_list = list(Issue.objects.filter(**kwargs).exclude(status='Closed').order_by(order))
 		elif status == 'closed':
-			issue_list = list(Issue.objects.filter(status='Closed').order_by(order))
+			issue_list = list(Issue.objects.filter(**kwargs, status='Closed').order_by(order))
 
 	except FieldError:
 
 		if status == 'all':
-			issue_list = list(Issue.objects.all().order_by(default_sort_order))
+			issue_list = list(Issue.objects.filter(**kwargs).order_by(default_sort_order))
 		elif status == 'open':
-			issue_list = list(Issue.objects.filter().exclude(status='Closed').order_by(default_sort_order))
+			issue_list = list(Issue.objects.filter(**kwargs).exclude(status='Closed').order_by(default_sort_order))
 		elif status == 'closed':
-			issue_list = list(Issue.objects.filter(status='Closed').order_by(default_sort_order))
+			issue_list = list(Issue.objects.filter(**kwargs, status='Closed').order_by(default_sort_order))
 
 	paginator = Paginator(issue_list, 25)
 	page = request.GET.get('page')
@@ -109,6 +116,11 @@ def issue(request, issue_id):
 	''' Issue object for this view.
 	'''
 
+	if request.user != issue.creater and not request.user.is_superuser and not request.user.is_staff:
+		return HttpResponseRedirect(reverse('index'))
+	''' Only staff, issue owners and superuser users can see their issue details.
+	'''
+
 	view_context = {
 		'issue': issue,
 		'comment_list': Comment.objects.filter(issue=issue),
@@ -169,7 +181,7 @@ def add_issue(request):
 		''' If this view is called using the POST method ...
 		'''
 		
-		add_issue_form = AddIssueForm(request.POST)
+		add_issue_form = AddIssueForm(request.POST, user=request.user)
 		''' Get the data from the POST request.
 		'''
 		
@@ -196,7 +208,7 @@ def add_issue(request):
 	else:
 		''' If this view is called by any other method besides POST -- usually 'GET' ...
 		'''
-		add_issue_form = AddIssueForm()
+		add_issue_form = AddIssueForm(user=request.user)
 		''' Create a blank create new issue form.
 		'''
 
@@ -223,6 +235,13 @@ def add_issue(request):
 @login_required(login_url=LOGIN_URL)
 def add_project(request):
 	''' View: /project/add/
+	'''
+
+	if not request.user.is_staff and not request.user.is_superuser:
+		return HttpResponseRedirect(
+			reverse('projects')
+		)
+	''' Only staff and superuser users can create projects.
 	'''
 
 	if request.method == 'POST':
@@ -274,6 +293,13 @@ def add_component(request, project_id):
 
 	project = Project.objects.get(pk=project_id)
 	''' Project object this component is being added for.
+	'''
+
+	if not request.user.is_staff and not request.user.is_superuser and project.owner != request.user:
+		return HttpResponseRedirect(
+			reverse('project', kwargs={'project_id': project_id})
+		)
+	''' Only staff users, project owners and superuser users can add a component to a project.
 	'''
 
 	if request.method == 'POST':
@@ -339,6 +365,13 @@ def add_comment(request, issue_id):
 
 	issue = Issue.objects.get(pk=issue_id)
 	''' Issue object this comment is being added for.
+	'''
+
+	if not request.user.is_staff and not request.user.is_superuser and issue.creater != request.user:
+		return HttpResponseRedirect(
+			reverse('index')
+		)
+	''' Only staff, issue owners and superuser users can add a comment to an issue.
 	'''
 
 	if request.method == 'POST':
@@ -413,6 +446,11 @@ def change_issue(request, issue_id):
 
 	issue = Issue.objects.get(pk=issue_id)
 
+	if not request.user.is_staff and not request.user.is_superuser:
+		return HttpResponseRedirect(
+			reverse('issue', kwargs={'issue_id': issue_id})
+		)
+
 	if request.method == "POST":
 		''' If this view is called using the POST method ...
 		'''
@@ -468,6 +506,11 @@ def change_comment(request, comment_id):
 	comment = Comment.objects.get(pk=comment_id)
 	''' Comment object for this view.
 	'''
+
+	if not request.user.is_staff and not request.user.is_superuser and comment.author != request.user:
+		return HttpResponseRedirect(
+			reverse('index')
+		)
 
 	if request.method == "POST":
 		''' If this view is called using the POST method ...
@@ -536,6 +579,11 @@ def change_project(request, project_id):
 
 	project = Project.objects.get(pk=project_id)
 
+	if not request.user.is_staff and not request.user.is_superuser and project.owner != request.user:
+		return HttpResponseRedirect(
+			reverse('project', kwargs={'project_id': project_id})
+		)
+
 	if request.method == "POST":
 		''' If this view is called using the POST method ...
 		'''
@@ -592,6 +640,11 @@ def change_component(request, component_id):
 
 	component = Component.objects.get(pk=component_id)
 
+	if not request.user.is_staff and not request.user.is_superuser and component.project.owner != request.user:
+		return HttpResponseRedirect(
+			reverse('project', kwargs={'project_id': component.project.id})
+		)
+
 	if request.method == "POST":
 		''' If this view is called using the POST method ...
 		'''
@@ -644,7 +697,14 @@ def change_component(request, component_id):
 def delete_project(request, project_id):
 	''' View: /project/<project_id>/delete/
 	'''
+
 	project = Project.objects.get(pk=project_id)
+
+	if not request.user.is_staff and not request.user.is_superuser and project.owner != request.user:
+		return HttpResponseRedirect(
+			reverse('project', kwargs={'project_id': project_id})
+		)
+
 	project.delete()
 
 	return HttpResponseRedirect(reverse('projects'))
@@ -652,22 +712,16 @@ def delete_project(request, project_id):
 def delete_component(request, component_id):
 	''' View: /component/<component_id>/delete/
 	'''
+
 	component = Component.objects.get(pk=component_id)
+
+	if not request.user.is_staff and not request.user.is_superuser and compoenent.project.owner != request.user:
+		return HttpResponseRedirect(
+			reverse('project', kwargs={'project_id': project_id})
+		)
+
 	component.delete()
 
 	return HttpResponseRedirect(
 		reverse('project', kwargs={'project_id': component.project.id})
 	)
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,6 +2,16 @@
 
 	<h1>Project - {{ project.name }}</h1>
 
+	{% if user.is_staff or user.is_superuser or user == project.owner %}
+
+	<p>
+		<a href="{% url 'change_project' project_id=project.id %}">
+			Edit Project Details
+		</a>
+	</p>
+
+	{% endif %}
+
 	<table>
 
 		<tr>
@@ -58,16 +68,20 @@
 		
 		</tr>
 
-		<tr>
-			<td colspan="2">
-				
-				<a href="{% url 'add_component' project_id=project.id %}">
-					Add Component
-				</a>
+		{% if user.is_staff or user.is_superuser or user == project.owner %}
 			
-			</td>
-		</tr>
-	
+			<tr>
+				<td colspan="2">
+					
+					<a href="{% url 'add_component' project_id=project.id %}">
+						Add Component
+					</a>
+				
+				</td>
+			</tr>
+
+		{% endif %}
+
 		<tr>
 
 			<th>Components</th>
@@ -82,25 +96,29 @@
 							{{ component.description|safe }}
 						</p>
 
-						<p>
-							<a 
-								href="{% url 'change_component' component_id=component.id %}"
-							>
+						{% if user.is_staff or user.is_superuser or user == project.owner %}
 
-								Edit
-							
-							</a>
-							 &middot; 
-							
-							<a 
-								href="{% url 'delete_component' component_id=component.id %}"
+							<p>
+								<a 
+									href="{% url 'change_component' component_id=component.id %}"
+								>
 
-								onclick="return confirm('Click OK to confirm deletion.');"
-							>
-								Delete
-							</a>
-						</p>
+									Edit
+								
+								</a>
+								 &middot; 
+								
+								<a 
+									href="{% url 'delete_component' component_id=component.id %}"
+
+									onclick="return confirm('Click OK to confirm deletion.');"
+								>
+									Delete
+								</a>
+							</p>
 					
+						{% endif %}
+
 					{% endfor %}
 				</ul>
 			</td>

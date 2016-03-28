@@ -4,6 +4,15 @@ from issuetrack.models import Comment, Component, Issue, Project
 from issuetrack.settings import ISSUE_STATUSES
 
 class AddIssueForm(ModelForm):
+
+	def __init__(self, *args, **kwargs):
+		
+		user = kwargs.pop('user')
+
+		super(AddIssueForm, self).__init__(*args, **kwargs)
+		
+		if not user.is_staff or not user.is_superuser:
+			del(self.fields['assignee'])
 	
 	class Meta:
 		
@@ -31,7 +40,7 @@ class AddIssueForm(ModelForm):
 				)
 
 
-class ChangeIssueForm(AddIssueForm):
+class ChangeIssueForm(ModelForm):
 
 	class Meta:
 		

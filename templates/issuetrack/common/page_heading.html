@@ -128,15 +128,18 @@
 			<div class="breadcrumbs">
 
 				<a href="{% url 'index' %}#">Home</a>
-				 &middot; 
 				
+				 &middot; 
 				<a href="{% url 'projects' %}#">Projects</a>
-				 &middot; 
 				
+				 &middot; 
 				<a href="{% url 'add_issue' %}#">Create New Issue</a>
-				 &middot; 
 				
-				<a href="{% url 'add_project' %}#">Add New Project</a>
+				
+				{% if user.is_staff or user.is_superuser %}
+					 &middot; 
+					<a href="{% url 'add_project' %}#">Add New Project</a>
+				{% endif %}
 
 			</div>
 
