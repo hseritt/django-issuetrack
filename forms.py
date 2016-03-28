@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-from issuetrack.models import Comment, Component, Issue, Project, STATUS_CHOICES
+from issuetrack.models import Comment, Component, Issue, Project
+from issuetrack.settings import ISSUE_STATUSES
 
 class AddIssueForm(ModelForm):
 	
@@ -121,7 +122,7 @@ class ChangeComponentForm(ModelForm):
 class AddCommentForm(ModelForm):
 
 	status = forms.ChoiceField(
-		choices=STATUS_CHOICES, 
+		choices=ISSUE_STATUSES, 
 		label='Set Status After Comment', 
 	)
 

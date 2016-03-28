@@ -35,6 +35,50 @@ FORM_TABLE_FOOTING = 'form_table_footing.html'
 ''' The html file used for footing all form tables.
 '''
 
+ISSUE_STATUSES = (
+	'New',
+	'Open',
+	'In Progress',
+	'Resolved',
+	'Closed',
+	'On Hold',
+	'Pending Creater',
+	'Pending 3rd Party',
+	'Duplicate',
+	'Invalid/Unfounded',
+	"Won't Fix",
+)
+
+ISSUE_KINDS = (
+	'Bug',
+	'Improvement',
+	'Feature',
+	'Info',
+	'Proposal',
+	'Task',
+)
+
+COMMENT_AUDIENCES = (
+	'Public',
+	'Private',
+)
+
+ISSUE_PRIORITIES = (
+	'Blocker',
+	'Critical',
+	'Major',
+	'Minor',
+	'Trivial',
+)
+
+ISSUE_URGENCIES = (
+	'ASAP',
+	'7 days',
+	'21 days',
+	'42 days',
+	'Indefinite',
+)
+
 '''
 ==================================================
 Make settings changes above and leave below as is.
@@ -81,4 +125,18 @@ TEMPLATE_CONTEXT = {
 	foot: 				See FOOT.
 	form_table_heading: See FORM_TABLE_HEADING.
 	form_table_footing: See FORM_TABLE_FOOTING.
+'''
+
+# ========================================================
+
+ISSUE_STATUSES = [ (e, e) for e in ISSUE_STATUSES ]
+
+ISSUE_KINDS = [ (e, e) for e in ISSUE_KINDS ]
+
+COMMENT_AUDIENCES = [ (e, e) for e in COMMENT_AUDIENCES ]
+
+ISSUE_PRIORITIES = [ (e, e) for e in ISSUE_PRIORITIES ]
+
+ISSUE_URGENCIES = [ (e, e) for e in ISSUE_URGENCIES ]
+''' Build the choices as a two-element list for models and forms.
 '''

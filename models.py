@@ -3,20 +3,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-
-STATUS_CHOICES = (
-	('New', 'New'),
-	('Open', 'Open'),
-	('In Progress', 'In Progress'),
-	('Resolved', 'Resolved'),
-	('Closed', 'Closed'),
-	('On Hold', 'On Hold'),
-	('Pending Creater', 'Pending Creater'),
-	('Pending 3rd Party', 'Pending 3rd Party'),
-	('Duplicate', 'Duplicate'),
-	('Invalid/Unfounded', 'Invalid/Unfounded'),
-	("Won't Fix", "Won't Fix"),
-)
+from issuetrack.settings import ISSUE_STATUSES, ISSUE_KINDS, ISSUE_PRIORITIES, ISSUE_URGENCIES, COMMENT_AUDIENCES
 
 class Project(models.Model):
 	''' Project can be something like a software application or ongoing event or project.
@@ -99,47 +86,28 @@ class Issue(models.Model):
 	kind = models.CharField(
 		'Kind', 
 		max_length=30,
-		choices=(
-			('Bug', 'Bug'),
-			('Improvement', 'Improvement'),
-			('Feature', 'Feature'),
-			('Info', 'Info'),
-			('Proposal', 'Proposal'),
-			('Task', 'Task'),
-		)
+		choices=ISSUE_KINDS,
 	)
 	''' The kind or type of issue.
 	'''
 	priority = models.CharField(
 		'Priority',
 		max_length=30,
-		choices=(
-			('Blocker', 'Blocker'),
-			('Critical', 'Critical'),
-			('Major', 'Major'),
-			('Minor', 'Minor'),
-			('Trivial', 'Trivial'),
-		)
+		choices=ISSUE_PRIORITIES,
 	)
 	''' The priority for the issue.
 	'''
 	urgency = models.CharField(
 		'Urgency',
 		max_length=30,
-		choices=(
-			('ASAP', 'ASAP'),
-			('7 days', '7 days'),
-			('21 days', '21 days'),
-			('42 days', '42 days'),
-			('Indefinite', 'Indefinite'),
-		)
+		choices=ISSUE_URGENCIES,
 	)
 	''' The urgency for the issue. Sets an expectation of when an issue should be resolved.
 	'''
 	status = models.CharField(
 		'Status',
 		max_length=30,
-		choices=STATUS_CHOICES,
+		choices=ISSUE_STATUSES,
 		default='New',
 	)
 	''' The status or disposition of the issue.
@@ -188,10 +156,7 @@ class Comment(models.Model):
 	audience = models.CharField(
 		'Audience', 
 		max_length=30,
-		choices=(
-			('Public', 'Public'),
-			('Private', 'Private'),
-		),
+		choices=COMMENT_AUDIENCES,
 		default='Private',
 	)
 	''' Who the comment is intended for.
