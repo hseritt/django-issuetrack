@@ -4,7 +4,7 @@ Should mimic in functionality that of the issue tracker used for GitHub and Bitb
 
 ## Functionality
 
-You can create projects, project components, issues and comments. Added login functionality and user identification.
+You can create projects, project components, issues and comments. Added login functionality.
 
 ## Appearance
 
