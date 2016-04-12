@@ -1,3 +1,6 @@
+''' Admin console builder.
+'''
+
 from django.contrib import admin
 from issuetrack.models import Comment, Component, Issue, Project
 
