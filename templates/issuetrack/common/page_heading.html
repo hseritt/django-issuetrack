@@ -5,7 +5,9 @@
 	<head>
 
 		<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  		
   		<script>
+  			
   			/*
   			/* A more general tinymce configuration:
   			tinymce.init(
@@ -17,6 +19,7 @@
   					editor_deselector: 	"mceNoEditor"
   				});
   			*/
+  			
   			tinymce.init({
 	  			  /* A more "complete" tinymce configuration:
 	  			  */
@@ -29,7 +32,6 @@
 				    "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
 				    "table contextmenu directionality emoticons template textcolor paste textcolor colorpicker textpattern"
 				  ],
-
 				  toolbar1: "newdocument fullpage | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
 				  toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor",
 				  toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
@@ -104,9 +106,13 @@
 				<div id="branding">
 					
 					<h1 id="site-name">
+						
 						<a href="{% url 'index' %}">
+							
 							Issue Track
+						
 						</a>
+					
 					</h1>
 				
 				</div>
@@ -137,8 +143,11 @@
 				
 				
 				{% if user.is_staff or user.is_superuser %}
+					 
 					 &middot; 
+					
 					<a href="{% url 'add_project' %}#">Add New Project</a>
+				
 				{% endif %}
 
 			</div>
