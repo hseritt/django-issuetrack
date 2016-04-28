@@ -4,30 +4,33 @@ from django.conf.urls import patterns, include, url
 from django.contrib.auth.views import login
 from django.contrib.auth.views import logout
 
-from issuetrack.views import index, issue, add_issue, add_project, projects, project, add_component, add_comment, change_issue, change_comment, change_project, change_component, delete_project, delete_component
+from issuetrack.views import index, issue, add_issue, add_project, projects
+from issuetrack.views import project, add_component, add_comment, change_issue
+from issuetrack.views import change_comment, change_project, change_component
+from issuetrack.views import delete_project, delete_component
 
 urlpatterns = [
     url(
-        regex=r'^logout/$', 
-        view=logout, 
-        kwargs={'next_page': '/issuetrack/'}, 
+        regex=r'^logout/$',
+        view=logout,
+        kwargs={'next_page': '/issuetrack/'},
         name='logout'
     ),
     url(
-    	regex=r'^$',
-    	view=index,
-    	name='index'
+        regex=r'^$',
+        view=index,
+        name='index'
     ),
     url(
-    	regex=r'^issue/add/$',
-    	view=add_issue,
-    	name='add_issue',
+        regex=r'^issue/add/$',
+        view=add_issue,
+        name='add_issue',
     ),
     url(
-		regex=r'^issue/(?P<issue_id>[^/]+)/$',
-		view=issue,
-		name='issue',
-	),
+        regex=r'^issue/(?P<issue_id>[^/]+)/$',
+        view=issue,
+        name='issue',
+    ),
     url(
         regex=r'^issue/(?P<issue_id>[^/]+)/comment/add/$',
         view=add_comment,
