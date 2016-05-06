@@ -1,3 +1,4 @@
+''' View definitions. '''
 
 from __future__ import absolute_import
 
@@ -8,28 +9,26 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from issuetrack.forms import AddIssueForm, AddProjectForm, AddComponentForm
-from issuetrack.forms import AddCommentForm, ChangeIssueForm, ChangeCommentForm
-from issuetrack.forms import ChangeProjectForm, ChangeComponentForm
+from issuetrack.forms import (
+    AddIssueForm, AddProjectForm, AddComponentForm, AddCommentForm,
+    ChangeIssueForm, ChangeCommentForm, ChangeProjectForm, ChangeComponentForm
+)
 from issuetrack.models import Comment, Component, Issue, Project
 from issuetrack.settings import TEMPLATE_DIR, TEMPLATE_CONTEXT, LOGIN_URL
 
 
 @login_required(login_url=LOGIN_URL)
 def index(request):
-    ''' View: /
-    '''
-
+    ''' View: / '''
     default_sort_order = 'created'
-    ''' This view's default sorting order in lieu of a valid order field.
-    '''
+    """ This view's default sorting order in lieu of a valid order field. """
+
     order = request.GET.get('order_by', default_sort_order)
     ''' Requested sorting order for this view.
     '''
     status = request.GET.get('status', 'all')
     ''' Filter by status or use 'all'.
     '''
-
     if request.user.is_staff or request.user.is_superuser:
         kwargs = {}
     else:
@@ -37,9 +36,7 @@ def index(request):
     ''' Staff and superuser users can see all available issues. Non-privileged
      users can only see their own issues.
     '''
-
     try:
-
         if status == 'all':
             issue_list = list(Issue.objects.filter(**kwargs).order_by(order))
         elif status == 'open':
@@ -49,9 +46,7 @@ def index(request):
             issue_list = list(
                 Issue.objects.filter(
                     **kwargs, status='Closed').order_by(order))
-
     except FieldError:
-
         if status == 'all':
             issue_list = list(
                 Issue.objects.filter(**kwargs).order_by(default_sort_order))
@@ -63,17 +58,14 @@ def index(request):
             issue_list = list(
                 Issue.objects.filter(
                     **kwargs, status='Closed').order_by(default_sort_order))
-
     paginator = Paginator(issue_list, 25)
     page = request.GET.get('page')
-
     try:
         issue_list = paginator.page(page)
     except PageNotAnInteger:
         issue_list = paginator.page(1)
     except EmptyPage:
         issue_list = paginator.page(paginator.num_pages)
-
     view_context = {
         'issue_list': issue_list,
         'page_title': 'Issuetrack',
@@ -83,15 +75,12 @@ def index(request):
         issue_list:     List of all issues
         page_title:     Title of the html page
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'index.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -99,7 +88,6 @@ def index(request):
 def projects(request):
     ''' View: /projects/
     '''
-
     view_context = {
         'project_list': Project.objects.all(),
         'page_title': 'Issuetrack - Projects',
@@ -108,15 +96,12 @@ def projects(request):
         projects_list:  List of all projects
         page_title:     Title of the html page
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'listing', 'projects.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -124,18 +109,15 @@ def projects(request):
 def issue(request, issue_id):
     ''' View: /issue/<issue_id>/
     '''
-
     issue = Issue.objects.get(pk=issue_id)
     ''' Issue object for this view.
     '''
-
     if request.user != issue.creater and not request.user.is_superuser and \
-    not request.user.is_staff:
+            not request.user.is_staff:
         return HttpResponseRedirect(reverse('index'))
     ''' Only staff, issue owners and superuser users can see their
     issue details.
     '''
-
     view_context = {
         'issue': issue,
         'comment_list': Comment.objects.filter(issue=issue),
@@ -146,15 +128,12 @@ def issue(request, issue_id):
         comment_list:   List of comments for this issue.
         page_title:     Title of the html page.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'model', 'issue.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -162,11 +141,9 @@ def issue(request, issue_id):
 def project(request, project_id):
     ''' View: /project/<project_id>/
     '''
-
     project = Project.objects.get(pk=project_id)
     ''' Project object for this view.
     '''
-
     view_context = {
         'project': project,
         'page_title': 'Issuetrack - Project: {}'.format(project.name),
@@ -175,15 +152,12 @@ def project(request, project_id):
         project:        Project object for this view.
         page_title:     Title of the html page.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'model', 'project.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -191,15 +165,12 @@ def project(request, project_id):
 def add_issue(request):
     ''' View: /issue/add/
     '''
-
     if request.method == "POST":
         ''' If this view is called using the POST method ...
         '''
-
         add_issue_form = AddIssueForm(request.POST, user=request.user)
         ''' Get the data from the POST request.
         '''
-
         if add_issue_form.is_valid():
             ''' If this is form's data is valid then create the new
             Issue object.
@@ -215,15 +186,12 @@ def add_issue(request):
             issue.save()
             ''' Now, save the issue object to peristence.
             '''
-
             return HttpResponseRedirect(reverse('index'))
             ''' Send the user back to the "home" page.
             '''
-
             ''' If this form's data is NOT valid, no worries. Django
             will provide some nice error messages in the generated form.
             '''
-
     else:
         ''' If this view is called by any other method besides POST --
         usually 'GET' ...
@@ -231,7 +199,6 @@ def add_issue(request):
         add_issue_form = AddIssueForm(user=request.user)
         ''' Create a blank create new issue form.
         '''
-
     view_context = {
         'add_issue_form': add_issue_form,
         'page_title': 'Issuetrack - Create New Issue',
@@ -240,15 +207,12 @@ def add_issue(request):
         add_issue_form:     Our generated add_issue_form.
         page_title:         Title of the html page.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'add', 'issue.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -256,22 +220,18 @@ def add_issue(request):
 def add_project(request):
     ''' View: /project/add/
     '''
-
     if not request.user.is_staff and not request.user.is_superuser:
         return HttpResponseRedirect(
             reverse('projects')
         )
     ''' Only staff and superuser users can create projects.
     '''
-
     if request.method == 'POST':
         ''' If this view is called using the POST method ...
         '''
-
         add_project_form = AddProjectForm(request.POST)
         ''' Get the data from the POST request.
         '''
-
         if add_project_form.is_valid():
             ''' If this is form's data is valid then create the new
             Issue object.
@@ -296,15 +256,12 @@ def add_project(request):
         'add_project_form': add_project_form,
         'page_title': 'Issuetrack - Add New Project',
     }
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'add', 'project.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -312,33 +269,27 @@ def add_project(request):
 def add_component(request, project_id):
     ''' View: /project/<project_id>/component/add/
     '''
-
     project = Project.objects.get(pk=project_id)
     ''' Project object this component is being added for.
     '''
-
     if not request.user.is_staff and not request.user.is_superuser and \
-    project.owner != request.user:
+            project.owner != request.user:
         return HttpResponseRedirect(
             reverse('project', kwargs={'project_id': project_id})
         )
     ''' Only staff users, project owners and superuser users can add
     a component to a project.
     '''
-
     if request.method == 'POST':
         ''' If this view is called using the POST method ...
         '''
-
         add_component_form = AddComponentForm(request.POST)
         ''' Get the data from the POST request.
         '''
-
         if add_component_form.is_valid():
             ''' If this is form's data is valid then create the new
             Component object.
             '''
-
             new_component = add_component_form.save(commit=False)
             ''' Create the new component for the project but don't save it yet.
             '''
@@ -348,7 +299,6 @@ def add_component(request, project_id):
             new_component.save()
             ''' Save the new component to persistence.
             '''
-
             return HttpResponseRedirect(
                 reverse(
                     'project', kwargs={'project_id': project_id}
@@ -360,7 +310,6 @@ def add_component(request, project_id):
         add_component_form = AddComponentForm()
         ''' Create an empty component form.
         '''
-
     view_context = {
         'add_component_form': add_component_form,
         'page_title': 'Issuetrack - Add New Component for Project {}'.format(
@@ -372,7 +321,6 @@ def add_component(request, project_id):
         page_title:             Title of the html page.
         project:                Project object for this view.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
@@ -380,7 +328,6 @@ def add_component(request, project_id):
     template_file = os.path.join(TEMPLATE_DIR, 'add', 'component.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -388,33 +335,27 @@ def add_component(request, project_id):
 def add_comment(request, issue_id):
     ''' View: /issue/<issue_id>/comment/add/
     '''
-
     issue = Issue.objects.get(pk=issue_id)
     ''' Issue object this comment is being added for.
     '''
-
     if not request.user.is_staff and not request.user.is_superuser and \
-    issue.creater != request.user:
+            issue.creater != request.user:
         return HttpResponseRedirect(
             reverse('index')
         )
     ''' Only staff, issue owners and superuser users can add a comment to
     an issue.
     '''
-
     if request.method == 'POST':
         ''' If this view is called using the POST method ...
         '''
-
         add_comment_form = AddCommentForm(request.POST)
         ''' Get the data from the POST request.
         '''
-
         if add_comment_form.is_valid():
             ''' If this is form's data is valid then create the new
             Component object.
             '''
-
             new_comment = add_comment_form.save(commit=False)
             ''' Create the new comment for the issue but don't save it yet.
             '''
@@ -424,16 +365,12 @@ def add_comment(request, issue_id):
             new_comment.author = request.user
             ''' Set the author of the comment based on the logged-in user.
             '''
-
             issue.status = add_comment_form.cleaned_data['status']
             issue.save()
-
             new_comment.issue_status = issue.status
-
             new_comment.save()
             ''' Save the new component to persistence.
             '''
-
             return HttpResponseRedirect(
                 reverse(
                     'issue', kwargs={'issue_id': issue_id}
@@ -445,7 +382,6 @@ def add_comment(request, issue_id):
         add_comment_form = AddCommentForm(issue_status=issue.status)
         ''' Create an empty comment form.
         '''
-
     view_context = {
         'add_comment_form': add_comment_form,
         'page_title': 'Issuetrack - Add New Comment for Issue {}'.format(
@@ -457,15 +393,12 @@ def add_comment(request, issue_id):
         page_title:             Title of the html page.
         issue:              Issue object for this view.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'add', 'comment.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -473,22 +406,17 @@ def add_comment(request, issue_id):
 def change_issue(request, issue_id):
     ''' View: /issue/<issue_id>/change/
     '''
-
     issue = Issue.objects.get(pk=issue_id)
-
     if not request.user.is_staff and not request.user.is_superuser:
         return HttpResponseRedirect(
             reverse('issue', kwargs={'issue_id': issue_id})
         )
-
     if request.method == "POST":
         ''' If this view is called using the POST method ...
         '''
-
         change_issue_form = ChangeIssueForm(request.POST, instance=issue)
         ''' Get the data from the POST request but saving for this issue.
         '''
-
         if change_issue_form.is_valid():
             ''' If this is form's data is valid then create the new
             Issue object.
@@ -496,12 +424,10 @@ def change_issue(request, issue_id):
             issue = change_issue_form.save()
             ''' Save data from this form to the same issue.
             '''
-
             return HttpResponseRedirect(reverse(
                 'issue', kwargs={'issue_id': issue.id}))
             ''' Send the user back to the issue's page.
             '''
-
     else:
         ''' If this view is called by any other method besides POST --
         usually 'GET' ...
@@ -509,7 +435,6 @@ def change_issue(request, issue_id):
         change_issue_form = ChangeIssueForm(instance=issue)
         ''' Create a change issue form based on the issue instance.
         '''
-
     view_context = {
         'change_issue_form': change_issue_form,
         'page_title': 'Issuetrack - Change Issue - {}'.format(issue.id),
@@ -518,15 +443,12 @@ def change_issue(request, issue_id):
         change_issue_form:  Our generated change_issue_form.
         page_title:         Title of the html page.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'change', 'issue.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -534,26 +456,21 @@ def change_issue(request, issue_id):
 def change_comment(request, comment_id):
     ''' View: /comment/<comment_id>/change/
     '''
-
     comment = Comment.objects.get(pk=comment_id)
     ''' Comment object for this view.
     '''
-
     if not request.user.is_staff and not request.user.is_superuser and \
-    comment.author != request.user:
+            comment.author != request.user:
         return HttpResponseRedirect(
             reverse('index')
         )
-
     if request.method == "POST":
         ''' If this view is called using the POST method ...
         '''
-
         change_comment_form = ChangeCommentForm(
             request.POST, instance=comment, issue_status=comment.issue.status)
         ''' Get the data from the POST request but saving for this issue.
         '''
-
         if change_comment_form.is_valid():
             ''' If this form's data is valid then create the new Comment
             object.
@@ -570,12 +487,10 @@ def change_comment(request, comment_id):
             comment = change_comment_form.save()
             ''' Save data from this form to the same comment.
             '''
-
             return HttpResponseRedirect(reverse(
                 'issue', kwargs={'issue_id': comment.issue.id}))
             ''' Send the user back to the issue's page.
             '''
-
     else:
         ''' If this view is called by any other method besides POST --
         usually 'GET' ...
@@ -584,7 +499,6 @@ def change_comment(request, comment_id):
             instance=comment, issue_status=comment.issue.status)
         ''' Create a change comment form based on the comment instance.
         '''
-
     view_context = {
         'comment': comment,
         'change_comment_form': change_comment_form,
@@ -595,15 +509,12 @@ def change_comment(request, comment_id):
         change_comment_form:    Our generated change_comment_form.
         page_title:             Title of the html page.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'change', 'comment.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -611,23 +522,18 @@ def change_comment(request, comment_id):
 def change_project(request, project_id):
     ''' View: /project/<project_id>/change/
     '''
-
     project = Project.objects.get(pk=project_id)
-
     if not request.user.is_staff and not request.user.is_superuser and \
-    project.owner != request.user:
+            project.owner != request.user:
         return HttpResponseRedirect(
             reverse('project', kwargs={'project_id': project_id})
         )
-
     if request.method == "POST":
         ''' If this view is called using the POST method ...
         '''
-
         change_project_form = ChangeProjectForm(request.POST, instance=project)
         ''' Get the data from the POST request but saving for this issue.
         '''
-
         if change_project_form.is_valid():
             ''' If this is form's data is valid then create the new
             Project object.
@@ -635,12 +541,10 @@ def change_project(request, project_id):
             project = change_project_form.save()
             ''' Save data from this form to the same project.
             '''
-
             return HttpResponseRedirect(reverse(
                 'project', kwargs={'project_id': project.id}))
             ''' Send the user back to the project page.
             '''
-
     else:
         ''' If this view is called by any other method besides POST --
         usually 'GET' ...
@@ -648,7 +552,6 @@ def change_project(request, project_id):
         change_project_form = ChangeProjectForm(instance=project)
         ''' Create a change project form based on the project instance.
         '''
-
     view_context = {
         'project': project,
         'change_project_form': change_project_form,
@@ -659,15 +562,12 @@ def change_project(request, project_id):
         change_project_form:    Our generated change_project_form.
         page_title:             Title of the html page.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(TEMPLATE_DIR, 'change', 'project.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
@@ -675,24 +575,19 @@ def change_project(request, project_id):
 def change_component(request, component_id):
     ''' View: /component/<component_id>/change/
     '''
-
     component = Component.objects.get(pk=component_id)
-
     if not request.user.is_staff and not request.user.is_superuser and \
-    component.project.owner != request.user:
+            component.project.owner != request.user:
         return HttpResponseRedirect(
             reverse('project', kwargs={'project_id': component.project.id})
         )
-
     if request.method == "POST":
         ''' If this view is called using the POST method ...
         '''
-
         change_component_form = ChangeComponentForm(
             request.POST, instance=component)
         ''' Get the data from the POST request but saving for this issue.
         '''
-
         if change_component_form.is_valid():
             ''' If this is form's data is valid then create the new
             Component object.
@@ -700,12 +595,10 @@ def change_component(request, component_id):
             component = change_component_form.save()
             ''' Save data from this form to the same component.
             '''
-
             return HttpResponseRedirect(reverse(
                 'project', kwargs={'project_id': component.project.id}))
             ''' Send the user back to the project page.
             '''
-
     else:
         ''' If this view is called by any other method besides POST --
         usually 'GET' ...
@@ -713,7 +606,6 @@ def change_component(request, component_id):
         change_component_form = ChangeComponentForm(instance=component)
         ''' Create a change component form based on the component instance.
         '''
-
     view_context = {
         'component': component,
         'change_component_form': change_component_form,
@@ -725,50 +617,43 @@ def change_component(request, component_id):
         change_component_form:  Our generated change_component_form.
         page_title:             Title of the html page.
     '''
-
     view_context.update(TEMPLATE_CONTEXT)
     ''' Add standard template context from Issuetrack settings file.
     '''
-
     template_file = os.path.join(
         TEMPLATE_DIR, 'change', 'component.html')
     ''' Template file used by this view.
     '''
-
     return render(request, template_file, view_context)
 
 
 def delete_project(request, project_id):
     ''' View: /project/<project_id>/delete/
     '''
-
     project = Project.objects.get(pk=project_id)
-
     if not request.user.is_staff and not request.user.is_superuser and \
-    project.owner != request.user:
+            project.owner != request.user:
         return HttpResponseRedirect(
             reverse('project', kwargs={'project_id': project_id})
         )
-
     project.delete()
-
     return HttpResponseRedirect(reverse('projects'))
 
 
 def delete_component(request, component_id):
     ''' View: /component/<component_id>/delete/
     '''
-
     component = Component.objects.get(pk=component_id)
-
+    ''' Get the component for the request. '''
     if not request.user.is_staff and not request.user.is_superuser and \
-    component.project.owner != request.user:
+            component.project.owner != request.user:
         return HttpResponseRedirect(
             reverse('project', kwargs={'project_id': project_id})
         )
-
+        ''' Redirect if the user doesn't have authorization. '''
     component.delete()
-
+    ''' Delete the component. '''
     return HttpResponseRedirect(
         reverse('project', kwargs={'project_id': component.project.id})
     )
+    ''' Redirect user back to the project's page so the result can be seen. '''
