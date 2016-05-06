@@ -113,7 +113,7 @@ def projects(request):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'projects.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'listing', 'projects.html')
     ''' Template file used by this view.
     '''
 
@@ -151,7 +151,7 @@ def issue(request, issue_id):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'issue.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'model', 'issue.html')
     ''' Template file used by this view.
     '''
 
@@ -180,7 +180,7 @@ def project(request, project_id):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'project.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'model', 'project.html')
     ''' Template file used by this view.
     '''
 
@@ -245,7 +245,7 @@ def add_issue(request):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'add_issue.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'add', 'issue.html')
     ''' Template file used by this view.
     '''
 
@@ -301,7 +301,7 @@ def add_project(request):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'add_project.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'add', 'project.html')
     ''' Template file used by this view.
     '''
 
@@ -377,7 +377,7 @@ def add_component(request, project_id):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'add_component.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'add', 'component.html')
     ''' Template file used by this view.
     '''
 
@@ -462,7 +462,7 @@ def add_comment(request, issue_id):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'add_comment.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'add', 'comment.html')
     ''' Template file used by this view.
     '''
 
@@ -523,7 +523,7 @@ def change_issue(request, issue_id):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'change_issue.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'change', 'issue.html')
     ''' Template file used by this view.
     '''
 
@@ -600,7 +600,7 @@ def change_comment(request, comment_id):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'change_comment.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'change', 'comment.html')
     ''' Template file used by this view.
     '''
 
@@ -664,7 +664,7 @@ def change_project(request, project_id):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'change_project.html')
+    template_file = os.path.join(TEMPLATE_DIR, 'change', 'project.html')
     ''' Template file used by this view.
     '''
 
@@ -730,7 +730,8 @@ def change_component(request, component_id):
     ''' Add standard template context from Issuetrack settings file.
     '''
 
-    template_file = os.path.join(TEMPLATE_DIR, 'change_component.html')
+    template_file = os.path.join(
+        TEMPLATE_DIR, 'change', 'component.html')
     ''' Template file used by this view.
     '''
 
